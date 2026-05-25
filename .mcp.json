@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "norskdata-docs": {
+      "command": "node",
+      "args": ["tools/dist/mcp/server.js"],
+      "env": { "ARCHIVE_ROOT": "." }
+    }
+  }
+}

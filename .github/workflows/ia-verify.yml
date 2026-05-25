@@ -1,0 +1,50 @@
+name: IA Verification
+
+on:
+  schedule:
+    - cron: "0 6 * * 0"  # Weekly on Sunday at 06:00 UTC
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: tools/package-lock.json
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install IA CLI
+        run: pip install internetarchive
+
+      - name: Configure IA
+        env:
+          IA_S3_ACCESS: ${{ secrets.IA_S3_ACCESS }}
+          IA_S3_SECRET: ${{ secrets.IA_S3_SECRET }}
+        run: |
+          mkdir -p ~/.config/internetarchive
+          cat > ~/.config/internetarchive/ia.ini << EOCONF
+          [s3]
+          access = ${IA_S3_ACCESS}
+          secret = ${IA_S3_SECRET}
+          EOCONF
+
+      - name: Install dependencies
+        working-directory: tools
+        run: npm ci || npm install
+
+      - name: Build tools
+        working-directory: tools
+        run: npm run build
+
+      - name: Verify IA checksums
+        working-directory: tools
+        run: node dist/cli.js ia-verify

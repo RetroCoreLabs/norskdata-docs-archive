@@ -1,0 +1,198 @@
+[
+  {
+    "group": "Hardware",
+    "items": [
+      {
+        "id": "01",
+        "name": "NORD-1 hardware (also including unnumbered NORD-1 manuals)",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "02",
+        "name": "PIOC hardware",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "05",
+        "name": "NORD-5, NORD-50, ND-500, ND-5000 CPUs",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "06",
+        "name": "NORD-1, NORD-10, NORD-10/S, ND-100, ND-110, ND-120 CPUs",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "07",
+        "name": "NORD-12",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "10",
+        "name": "MPM hardware",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "11",
+        "name": "Data storage equipment",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "12",
+        "name": "I/O Interfaces",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "13",
+        "name": "Miscellaneous hardware",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "14",
+        "name": "Domino interfaces",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      }
+    ],
+    "note": "Hardware category codes per ND-40.004.7 (1985), pre-September 1988 numbering change"
+  },
+  {
+    "group": "Mixed",
+    "items": [
+      {
+        "id": "20",
+        "name": "Internal System Documentation",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "23",
+        "name": "OpenLAN",
+        "status": "confirmed-by-document",
+        "evidence": "Real documents in archive use this code"
+      },
+      {
+        "id": "30",
+        "name": "Operating, diagnostic, maintenance",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "40",
+        "name": "Miscellaneous",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "50",
+        "name": "Hardware / software system description",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "70",
+        "name": "Documentation packages",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      }
+    ],
+    "note": "Mixed hardware/software category codes per ND-40.004.7 (1985)"
+  },
+  {
+    "group": "Software",
+    "items": [
+      {
+        "id": "60",
+        "name": "General software",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "61",
+        "name": "NORTEXT software",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "62",
+        "name": "Test and Verification software",
+        "status": "confirmed-by-document",
+        "evidence": "Manual ND-62.008 exists in archive"
+      },
+      {
+        "id": "63",
+        "name": "NOTIS software",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "64",
+        "name": "SINTRAN IV",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985). Missing from ndfloppy categories."
+      },
+      {
+        "id": "65",
+        "name": "TECH or Technovision software",
+        "status": "official",
+        "evidence": "ND-40.004.7 catalogue (1985)"
+      },
+      {
+        "id": "67",
+        "name": "Miscellaneous software",
+        "status": "defined-unused",
+        "evidence": "Defined in numbering scheme but no known documents use this code"
+      },
+      {
+        "id": "68",
+        "name": "NORCCIS",
+        "status": "confirmed-by-document",
+        "evidence": "Real documents in archive use this code"
+      },
+      {
+        "id": "80",
+        "name": "Utility software and special documentation",
+        "status": "confirmed-by-document",
+        "evidence": "Real documents in archive use this code"
+      }
+    ],
+    "note": "Software category codes per ND-40.004.7 (1985), pre-September 1988 numbering change"
+  },
+  {
+    "group": "Reference",
+    "items": [
+      {
+        "id": "99",
+        "name": "Reference cards",
+        "status": "confirmed-by-document",
+        "evidence": "Real documents in archive use this code"
+      }
+    ],
+    "note": "Reference material codes"
+  },
+  {
+    "group": "Third-Party",
+    "items": [],
+    "note": "Non-ND documents (AMD 2900, CDC, Seagate, ANSI standards) that provide hardware context but are not Norsk Data publications. These use publisher: third-party and do not have ND subject codes."
+  },
+  {
+    "_meta": {
+      "numberingChange": "In September 1988, Norsk Data changed the document numbering system from ND-XX.YYY.ZZ to ND-8XXYYY.ZZ. The category codes above are from the pre-1988 system. Post-1988 numbers encode the subject code in the first two digits after the 8 prefix.",
+      "statusValues": {
+        "official": "Listed in ND-40.004.7 Documentation Catalogue (1985 edition)",
+        "confirmed-by-document": "Not in ND-40.004.7 but real documents exist with this code",
+        "defined-unused": "Defined in the numbering scheme but no known documents use it"
+      },
+      "missingFromNdfloppy": "Category 64 (SINTRAN IV) was missing from the ndfloppy document-category.json but is official per ND-40.004.7."
+    }
+  }
+]

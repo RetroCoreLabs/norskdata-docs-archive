@@ -1,0 +1,287 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/HackerCorpLabs/norskdata-docs-archive/blob/main/catalog/schema/document.schema.json",
+  "title": "Norsk Data Document Catalog Entry",
+  "description": "Schema for entries in documents.json -- the master document registry for the Norsk Data Documentation Archive",
+  "type": "object",
+  "required": ["schemaVersion", "id", "title", "language", "category", "categoryId", "renditions"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Schema version. Breaking changes bump major version and require a migration script."
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique document identifier, typically the ND number (e.g., ND-60.128.03)"
+    },
+    "ndNumber": {
+      "type": "object",
+      "description": "Parsed ND document number components",
+      "properties": {
+        "subject": {
+          "type": "integer",
+          "description": "Subject/category code (e.g., 60 for general software)"
+        },
+        "sequence": {
+          "type": "integer",
+          "description": "Sequence number within the category (e.g., 128)"
+        },
+        "version": {
+          "type": ["integer", "null"],
+          "description": "Version number (e.g., 3 for .03)"
+        },
+        "revision": {
+          "type": ["string", "null"],
+          "description": "Revision letter suffix (e.g., A, B)"
+        },
+        "format": {
+          "type": "string",
+          "enum": ["old", "new"],
+          "description": "old = ND-XX.YYY.ZZ, new = ND-8XXYYY.ZZ (post-September 1988)"
+        },
+        "raw": {
+          "type": "string",
+          "description": "Original ND number string as printed on the document"
+        }
+      },
+      "required": ["subject", "sequence", "format", "raw"]
+    },
+    "title": {
+      "type": "string",
+      "description": "Document title"
+    },
+    "language": {
+      "type": "string",
+      "description": "Language code (EN, NO, etc.)",
+      "pattern": "^[A-Z]{2}$"
+    },
+    "preliminary": {
+      "type": "boolean",
+      "description": "Whether this is a preliminary/draft version",
+      "default": false
+    },
+    "category": {
+      "type": "string",
+      "description": "Human-readable category name (e.g., Software, Hardware, Mixed)"
+    },
+    "categoryId": {
+      "type": "string",
+      "description": "ND category code (e.g., 60, 06, 30)"
+    },
+    "documentType": {
+      "type": "string",
+      "enum": [
+        "user-guide",
+        "reference-manual",
+        "system-description",
+        "technical-note",
+        "program-description",
+        "installation",
+        "diskette-manifest",
+        "revision-log",
+        "reference-card",
+        "quick-reference",
+        "engineering-drawing",
+        "schematic",
+        "data-sheet",
+        "standard",
+        "unknown"
+      ],
+      "description": "Document type classification"
+    },
+    "publisher": {
+      "type": "string",
+      "enum": ["norsk-data", "third-party"],
+      "description": "Publisher: norsk-data for ND publications, third-party for external documents"
+    },
+    "thirdPartyPublisher": {
+      "type": "string",
+      "description": "Name of the third-party publisher (only when publisher is third-party)"
+    },
+    "relevance": {
+      "type": "string",
+      "description": "Why a third-party document is relevant to Norsk Data hardware/software"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of the document content"
+    },
+    "abstract": {
+      "type": "string",
+      "description": "Extended abstract or summary"
+    },
+    "date": {
+      "type": ["string", "null"],
+      "description": "Publication date (YYYY, YYYY-MM, or YYYY-MM-DD)"
+    },
+    "pages": {
+      "type": ["integer", "null"],
+      "description": "Total page count"
+    },
+    "author": {
+      "type": ["string", "null"],
+      "description": "Author or publishing entity"
+    },
+    "productIds": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Related product article numbers (e.g., ND-10048). Curated mapping, not derivable from document number."
+    },
+    "machineIds": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Related machine/CPU types (e.g., ND-100, ND-110, NORD-10)"
+    },
+    "supersedes": {
+      "type": ["string", "null"],
+      "description": "ID of the document this one supersedes"
+    },
+    "supersededBy": {
+      "type": ["string", "null"],
+      "description": "ID of the document that supersedes this one"
+    },
+    "sources": {
+      "type": "array",
+      "description": "Known online sources for this document",
+      "items": {
+        "type": "object",
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "title": { "type": "string" },
+          "retrievedDate": { "type": "string" }
+        },
+        "required": ["url", "title"]
+      }
+    },
+    "files": {
+      "type": "object",
+      "description": "Paths to files stored in git (text content only, no PDFs)",
+      "properties": {
+        "text": {
+          "type": ["string", "null"],
+          "description": "Relative path to the OCR/AI-generated text file in the repository"
+        }
+      }
+    },
+    "renditions": {
+      "type": "array",
+      "description": "All renditions of this document (scans, OCR versions, AI text, etc.)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": ["scan", "ocr", "cleaned", "ai-text"],
+            "description": "Role of this rendition"
+          },
+          "source": {
+            "type": "string",
+            "description": "Origin or tool that produced this rendition (e.g., Gandalf, ocrmypdf, Bitsavers)"
+          },
+          "md5": {
+            "type": ["string", "null"],
+            "description": "MD5 checksum of the file"
+          },
+          "sha256": {
+            "type": ["string", "null"],
+            "description": "SHA256 checksum of the file"
+          },
+          "fileSize": {
+            "type": ["integer", "null"],
+            "description": "File size in bytes"
+          },
+          "iaFile": {
+            "type": ["string", "null"],
+            "description": "Filename on Internet Archive (within the IA item)"
+          },
+          "isPrimary": {
+            "type": "boolean",
+            "description": "Whether this is the primary/best rendition for its role",
+            "default": false
+          },
+          "ocrTool": {
+            "type": ["string", "null"],
+            "description": "OCR tool and version used (for ocr role)"
+          },
+          "isFindingAid": {
+            "type": "boolean",
+            "description": "Whether this rendition is a finding aid (AI-generated, not authoritative)",
+            "default": false
+          },
+          "notes": {
+            "type": ["string", "null"],
+            "description": "Additional notes about this rendition"
+          },
+          "generatedDate": {
+            "type": ["string", "null"],
+            "description": "Date this rendition was generated (for AI text and re-OCR)"
+          },
+          "gitPath": {
+            "type": ["string", "null"],
+            "description": "Relative path in the git repository (for text files stored in git)"
+          }
+        },
+        "required": ["role", "source"]
+      }
+    },
+    "storage": {
+      "type": "object",
+      "description": "Storage location metadata",
+      "properties": {
+        "internetArchive": {
+          "type": "object",
+          "properties": {
+            "itemId": {
+              "type": "string",
+              "description": "Internet Archive item identifier"
+            },
+            "uploaded": {
+              "type": ["string", "null"],
+              "description": "Date uploaded to IA"
+            },
+            "verified": {
+              "type": ["string", "null"],
+              "description": "Date last verified on IA"
+            }
+          },
+          "required": ["itemId"]
+        }
+      }
+    },
+    "ocrQuality": {
+      "type": ["string", "null"],
+      "enum": ["excellent", "good", "fair", "poor", "none", null],
+      "description": "Quality assessment of the best available OCR"
+    },
+    "provenance": {
+      "type": "object",
+      "description": "Import and preservation provenance",
+      "properties": {
+        "importDate": {
+          "type": ["string", "null"],
+          "description": "Date imported into this catalog"
+        },
+        "importSource": {
+          "type": ["string", "null"],
+          "description": "Source from which the document was imported"
+        },
+        "preservationNotes": {
+          "type": ["string", "null"],
+          "description": "Notes on preservation decisions"
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Searchable tags"
+    },
+    "keywords": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Keywords extracted from the document content"
+    }
+  },
+  "additionalProperties": false
+}

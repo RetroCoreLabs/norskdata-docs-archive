@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: tools/package-lock.json
+
+      - name: Install dependencies
+        working-directory: tools
+        run: npm ci || npm install
+
+      - name: Build tools
+        working-directory: tools
+        run: npm run build
+
+      - name: Validate catalog
+        working-directory: tools
+        run: node dist/cli.js check
