@@ -167,7 +167,7 @@ export function importDocument(options: ImportOptions): ImportResult {
     supersedes: null,
     supersededBy: null,
     sources: [],
-    files: { text: null },
+    files: { text: null, textSource: null, textQuality: null },
     renditions: [rendition],
     storage: { internetArchive: null },
     ocrQuality: null,

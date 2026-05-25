@@ -156,11 +156,20 @@
     },
     "files": {
       "type": "object",
-      "description": "Paths to files stored in git (text content only, no PDFs)",
+      "description": "Paths to files stored in git (text content only, no PDFs). Text files are stored uncompressed for direct MCP access, GitHub rendering, and git diff readability.",
       "properties": {
         "text": {
           "type": ["string", "null"],
-          "description": "Relative path to the OCR/AI-generated text file in the repository"
+          "description": "Path to .txt file in git (OCR/AI text, relative to repo root)"
+        },
+        "textSource": {
+          "type": ["string", "null"],
+          "description": "How the text was generated: ocr, ai, hand-curated, imported-from-ndinsight"
+        },
+        "textQuality": {
+          "type": ["string", "null"],
+          "enum": ["excellent", "good", "fair", "poor", null],
+          "description": "Quality assessment of the text file content"
         }
       }
     },
@@ -243,6 +252,11 @@
             "verified": {
               "type": ["string", "null"],
               "description": "Date last verified on IA"
+            },
+            "syncStatus": {
+              "type": "string",
+              "enum": ["pending", "uploaded", "modified", "not-applicable"],
+              "description": "Sync status relative to Internet Archive"
             }
           },
           "required": ["itemId"]

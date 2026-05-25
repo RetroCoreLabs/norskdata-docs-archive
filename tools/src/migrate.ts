@@ -22,6 +22,16 @@ import {
   type Source,
 } from "./api/catalog.js";
 
+/**
+ * Generate an IA item ID inline (avoids importing ia-sync which imports catalog).
+ */
+function generateDocIaItemId_(entry: { id: string; ndNumber: NdNumber | null }): string {
+  if (entry.ndNumber) {
+    return `norskdata-doc-${formatNdNumber(entry.ndNumber)}`;
+  }
+  return `norskdata-doc-${entry.id}`;
+}
+
 /** Shape of an entry in the legacy documents.json. */
 interface LegacyEntry {
   id: number;
@@ -115,9 +125,16 @@ function migrateEntry(
     supersedes: null,
     supersededBy: null,
     sources,
-    files: { text: null },
+    files: { text: null, textSource: null, textQuality: null },
     renditions: [rendition],
-    storage: { internetArchive: null },
+    storage: {
+      internetArchive: {
+        itemId: generateDocIaItemId_({ id, ndNumber }),
+        uploaded: null,
+        verified: null,
+        syncStatus: "pending",
+      },
+    },
     ocrQuality: null,
     provenance: {
       importDate: new Date().toISOString().split("T")[0],

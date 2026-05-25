@@ -10,11 +10,28 @@ import { formatNdNumber } from "./nd-numbering.js";
 
 /**
  * Return catalog entries that have not yet been uploaded to Internet Archive.
+ * Checks both missing IA item ID and syncStatus != "uploaded".
  */
 export function getUnsyncedDocs(catalog: CatalogEntry[]): CatalogEntry[] {
-  return catalog.filter(
-    (entry) => !entry.storage?.internetArchive?.itemId
-  );
+  return catalog.filter((entry) => {
+    const ia = entry.storage?.internetArchive;
+    if (!ia) return true;
+    if (!ia.itemId) return true;
+    if (ia.syncStatus && ia.syncStatus !== "uploaded") return true;
+    return false;
+  });
+}
+
+/**
+ * Detect documents whose catalog state may have changed since last IA upload.
+ * Returns entries where syncStatus is "modified" or "pending".
+ */
+export function detectDocChanges(catalog: CatalogEntry[]): CatalogEntry[] {
+  return catalog.filter((entry) => {
+    const ia = entry.storage?.internetArchive;
+    if (!ia) return false;
+    return ia.syncStatus === "modified" || ia.syncStatus === "pending";
+  });
 }
 
 /**

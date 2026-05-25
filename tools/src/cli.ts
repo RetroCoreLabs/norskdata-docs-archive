@@ -7,10 +7,16 @@
 
 import { Command } from "commander";
 import { resolve } from "node:path";
-import { loadDocCatalog, findByTitle } from "./api/catalog.js";
+import {
+  loadDocCatalog,
+  saveDocCatalog,
+  findByTitle,
+  getTextPath,
+  writeTextFile,
+} from "./api/catalog.js";
 import { checkAllDeps, printDepReport } from "./api/check-deps.js";
 import { importDocument } from "./api/import.js";
-import { getUnsyncedDocs, syncDocToIa, verifyDocOnIa } from "./api/ia-sync.js";
+import { getUnsyncedDocs, detectDocChanges, syncDocToIa, verifyDocOnIa } from "./api/ia-sync.js";
 import { buildIndex, searchIndex } from "./api/index-builder.js";
 import {
   parseNdNumber,
@@ -19,7 +25,8 @@ import {
   type Category,
 } from "./api/nd-numbering.js";
 import { runMigration } from "./migrate.js";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync, copyFileSync } from "node:fs";
+import { basename } from "node:path";
 
 const program = new Command();
 
@@ -328,6 +335,126 @@ program
     console.log(
       `Not yet implemented: ai-text for ${source}\n` +
         "Requires: pdftoppm, ANTHROPIC_API_KEY (check with 'nddocs-cli check-deps')"
+    );
+  });
+
+// ---------- import-text ----------
+program
+  .command("import-text")
+  .description("Import a text file for a cataloged document")
+  .argument("<docId>", "Document ID (e.g., ND-60.128.03)")
+  .argument("<textFile>", "Path to the .txt file to import")
+  .option(
+    "--source <source>",
+    "How the text was generated (ocr, ai, hand-curated, imported-from-ndinsight)",
+    "ocr"
+  )
+  .option(
+    "--quality <quality>",
+    "Text quality (excellent, good, fair, poor)"
+  )
+  .action(
+    (
+      docId: string,
+      textFile: string,
+      opts: { source?: string; quality?: string }
+    ) => {
+      const rootDir = findRootDir();
+      const catalog = loadDocCatalog(rootDir);
+      const categories = loadCategories(rootDir);
+
+      // Find the document
+      const entry = catalog.find((e) => e.id === docId);
+      if (!entry) {
+        console.log(`[FAIL] Document not found: ${docId}`);
+        process.exit(1);
+      }
+
+      // Validate text file
+      const srcPath = resolve(textFile);
+      if (!existsSync(srcPath)) {
+        console.log(`[FAIL] Text file not found: ${srcPath}`);
+        process.exit(1);
+      }
+
+      // Read and write
+      const textContent = readFileSync(srcPath, "utf-8");
+      const gitPath = writeTextFile(rootDir, entry, textContent, categories);
+
+      if (!gitPath) {
+        console.log(
+          `[FAIL] Could not compute text path for ${docId} (no ND number?)`
+        );
+        process.exit(1);
+      }
+
+      // Update catalog entry
+      entry.files.text = gitPath;
+      entry.files.textSource = opts.source ?? "ocr";
+      entry.files.textQuality = opts.quality ?? null;
+      saveDocCatalog(rootDir, catalog);
+
+      console.log(`[OK] Imported text for ${docId}`);
+      console.log(`  Path: ${gitPath}`);
+      console.log(`  Source: ${entry.files.textSource}`);
+      console.log(`  Size: ${textContent.length} bytes`);
+    }
+  );
+
+// ---------- import-ndinsight ----------
+program
+  .command("import-ndinsight")
+  .description(
+    "Import NDInsight transcriptions (stub: shows what would be imported)"
+  )
+  .argument("<ndinsightDir>", "Path to NDInsight/Reference-Manuals directory")
+  .action((ndinsightDir: string) => {
+    const rootDir = findRootDir();
+    const catalog = loadDocCatalog(rootDir);
+    const categories = loadCategories(rootDir);
+    const srcDir = resolve(ndinsightDir);
+
+    if (!existsSync(srcDir)) {
+      console.log(`[FAIL] NDInsight directory not found: ${srcDir}`);
+      process.exit(1);
+    }
+
+    console.log(`Scanning NDInsight directory: ${srcDir}`);
+    console.log("(stub: not yet importing, just showing matches)\n");
+
+    // Look for .md files in the directory
+    const { readdirSync } = require("node:fs");
+    const files: string[] = readdirSync(srcDir).filter((f: string) =>
+      f.endsWith(".md")
+    );
+
+    let matched = 0;
+    let unmatched = 0;
+
+    for (const file of files) {
+      const ndNum = extractNdNumberFromFilename(file);
+      if (ndNum) {
+        const formatted = formatNdNumber(ndNum);
+        const entry = catalog.find((e) => e.id === formatted);
+        if (entry) {
+          const textPath = getTextPath(entry, categories);
+          console.log(`  [match] ${file} -> ${formatted} -> ${textPath}`);
+          matched++;
+        } else {
+          console.log(`  [no catalog entry] ${file} -> ${formatted}`);
+          unmatched++;
+        }
+      } else {
+        console.log(`  [no ND#] ${file}`);
+        unmatched++;
+      }
+    }
+
+    console.log(
+      `\n${files.length} files scanned: ${matched} matched, ${unmatched} unmatched.`
+    );
+    console.log(
+      "To actually import, run with --execute (not yet implemented)."
     );
   });
 

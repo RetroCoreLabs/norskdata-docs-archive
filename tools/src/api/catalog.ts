@@ -3,12 +3,14 @@
  * Provides read/write access to catalog/documents.json and search utilities.
  */
 
-import { readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { join, dirname } from "node:path";
 import {
   type NdNumber,
+  type Category,
   formatNdNumber,
   extractNdNumberFromFilename,
+  ndNumberToPath,
 } from "./nd-numbering.js";
 
 /** A single rendition of a document (scan, OCR, etc.) */
@@ -60,6 +62,8 @@ export interface CatalogEntry {
   sources: Source[];
   files: {
     text: string | null;
+    textSource: string | null;
+    textQuality: string | null;
   };
   renditions: Rendition[];
   storage: {
@@ -67,6 +71,7 @@ export interface CatalogEntry {
       itemId: string;
       uploaded: string | null;
       verified: string | null;
+      syncStatus: string;
     } | null;
   };
   ocrQuality: string | null;
@@ -163,4 +168,58 @@ export function generateDocId(entry: {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "")
     .substring(0, 80);
+}
+
+/**
+ * Compute the git-relative path for a document's text file.
+ * Example: ND-60.128.03 with categories -> documents/software/60-general/ND-60.128/ND-60.128.03_EN.txt
+ */
+export function getTextPath(
+  entry: CatalogEntry,
+  categories: Category[]
+): string | null {
+  if (!entry.ndNumber) return null;
+
+  const dirPath = ndNumberToPath(entry.ndNumber, categories);
+  const id = formatNdNumber(entry.ndNumber);
+  const lang = entry.language || "EN";
+  return `documents/${dirPath}/${id}_${lang}.txt`;
+}
+
+/**
+ * Write text content to the correct git path for a document.
+ * Creates directories as needed.
+ */
+export function writeTextFile(
+  rootDir: string,
+  entry: CatalogEntry,
+  textContent: string,
+  categories: Category[]
+): string | null {
+  const textPath = getTextPath(entry, categories);
+  if (!textPath) return null;
+
+  const fullPath = join(rootDir, textPath);
+  const dir = dirname(fullPath);
+  if (!existsSync(dir)) {
+    mkdirSync(dir, { recursive: true });
+  }
+  writeFileSync(fullPath, textContent, "utf-8");
+  return textPath;
+}
+
+/**
+ * Read text content from the git path for a document.
+ * Returns null if the file does not exist.
+ */
+export function readTextFile(
+  rootDir: string,
+  entry: CatalogEntry
+): string | null {
+  if (!entry.files?.text) return null;
+
+  const fullPath = join(rootDir, entry.files.text);
+  if (!existsSync(fullPath)) return null;
+
+  return readFileSync(fullPath, "utf-8");
 }
