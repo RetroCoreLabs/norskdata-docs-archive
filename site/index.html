@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Norsk Data Documentation Archive</title>
+<style>
+:root, [data-theme="dark"] {
+  --bg: #1a1a2e;
+  --bg-elev: #16213e;
+  --bg-sunken: #0f0f1e;
+  --text: #e0e0e0;
+  --text-muted: #9090a8;
+  --border: #2a3a5e;
+  --accent: #4a8de8;
+  --accent-bg: #1a2840;
+  --blue: #5a9ee8;  --blue-bg: #1a2a4a;
+  --teal: #4fb8c4;  --teal-bg: #15363a;
+  --green: #5cb85c; --green-bg: #1a3a1f;
+  --purple: #b07ad0; --purple-bg: #2e1a3a;
+  --orange: #ff8a3d; --orange-bg: #3a2010;
+}
+
+[data-theme="light"] {
+  --bg: #fbfaf6;
+  --bg-elev: #ffffff;
+  --bg-sunken: #f0eee9;
+  --text: #1a1a1a;
+  --text-muted: #6a6a6a;
+  --border: #d0cdc4;
+  --accent: #0D47A1;
+  --accent-bg: #E3F2FD;
+  --blue: #0D47A1;  --blue-bg: #E3F2FD;
+  --teal: #00838F;  --teal-bg: #E0F7FA;
+  --green: #2E7D32; --green-bg: #E8F5E9;
+  --purple: #7B1FA2; --purple-bg: #F3E5F5;
+  --orange: #E65100; --orange-bg: #FFF3E0;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { font-family: 'Consolas', 'Courier New', monospace; }
+
+.nd-header {
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  height: 3.25rem;
+}
+
+.nd-logo {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.nd-theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.35rem 0.5rem;
+  font-size: 1rem;
+  line-height: 1;
+  margin-left: auto;
+}
+
+.nd-theme-toggle:hover { color: var(--text); border-color: var(--text-muted); }
+
+.nd-main {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.nd-hero-stats {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.nd-stat {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  min-width: 120px;
+  flex: 1;
+}
+
+.nd-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: var(--accent);
+}
+
+.nd-stat-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.nd-search-box {
+  margin-bottom: 1.25rem;
+}
+
+.nd-search-box input {
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 100%;
+  max-width: 500px;
+}
+
+.nd-search-box input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-bg);
+}
+
+.nd-cat-nav {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.nd-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.65rem;
+  border-radius: 16px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+
+.nd-chip:hover { border-color: var(--accent); color: var(--text); text-decoration: none; }
+
+.nd-category-section { margin-bottom: 2rem; }
+
+.nd-category-header {
+  font-size: 1.2rem;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nd-doc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 0.75rem;
+}
+
+.nd-doc-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  transition: border-color 0.15s;
+}
+
+.nd-doc-card:hover { border-color: var(--accent); }
+
+.nd-doc-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.nd-doc-id {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.nd-doc-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.nd-doc-card-meta {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.3rem;
+}
+
+.nd-doc-card-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nd-badge {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--accent-bg);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.nd-badge-product { background: var(--blue-bg); color: var(--blue); border-color: var(--blue); }
+.nd-badge-info { background: var(--teal-bg); color: var(--teal); border-color: var(--teal); }
+
+.nd-text-muted { color: var(--text-muted); font-size: 0.82rem; }
+
+.nd-footer {
+  background: var(--bg-sunken);
+  border-top: 1px solid var(--border);
+  padding: 0.4rem 1.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.nd-hidden { display: none !important; }
+
+@media (max-width: 768px) {
+  .nd-doc-grid { grid-template-columns: 1fr; }
+  .nd-hero-stats { gap: 0.5rem; }
+  .nd-stat { min-width: 80px; padding: 0.75rem; }
+  .nd-stat-value { font-size: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="nd-header">
+  <span class="nd-logo">nd docs</span>
+  <button class="nd-theme-toggle" id="theme-toggle" title="Toggle theme"></button>
+</header>
+
+<main class="nd-main">
+  <div class="nd-hero-stats">
+    <div class="nd-stat"><div class="nd-stat-value">50</div><div class="nd-stat-label">documents</div></div>
+    <div class="nd-stat"><div class="nd-stat-value">0</div><div class="nd-stat-label">pages</div></div>
+    <div class="nd-stat"><div class="nd-stat-value">48</div><div class="nd-stat-label">products</div></div>
+    <div class="nd-stat"><div class="nd-stat-value">4</div><div class="nd-stat-label">categories</div></div>
+  </div>
+
+  <div class="nd-search-box">
+    <input type="text" id="doc-search" placeholder="Search documents (title, ND number, product...)">
+  </div>
+
+  <div class="nd-cat-nav">
+    <a href="#cat-02" class="nd-chip">Hardware (8)</a><a href="#cat-30" class="nd-chip">Mixed (4)</a><a href="#cat-99" class="nd-chip">Reference (1)</a><a href="#cat-60" class="nd-chip">Software (37)</a>
+  </div>
+
+  <div id="doc-results">
+    
+      <div class="nd-category-section" id="cat-02">
+        <h2 class="nd-category-header">
+          Hardware
+          <span class="nd-badge">8</span>
+        </h2>
+        <div class="nd-doc-grid">
+          
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-02.003.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-02.003.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">PIOC Hardware Reference Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-02003</span>
+          </div>
+          <div class="nd-doc-card-desc">Reference manual for the PIOC (Programmed Input/Output Controller) hardware, built around an MC 68000 microprocessor with 128KB of RAM.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-05.003.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-05.003.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NORD-50 Reference Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-05003</span>
+          </div>
+          <div class="nd-doc-card-desc">Detailed description of the NORD-50 registers and instruction set, written for programmers and operators.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-05.007.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-05.007.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NORD-50 Functional Description</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-05007</span>
+          </div>
+          <div class="nd-doc-card-desc">Description of the main building blocks of the NORD-50 and their functions from a hardware perspective.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-05.009.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-05.009.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NORD-500 Reference Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-05009</span>
+          </div>
+          <div class="nd-doc-card-desc">Reference manual describing the general design, instruction set and addressing modes of the ND-500.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-05.011.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-05.011.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">ND-500 Hardware Description</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-05011</span>
+          </div>
+          <div class="nd-doc-card-desc">Hardware description for ND-500 models 520/540/560, written for service and maintenance personnel.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-06.014.02</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-06.014.02" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">ND-100 Reference Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-06014</span>
+          </div>
+          <div class="nd-doc-card-desc">Technical reference manual for the ND-100 processor, including architecture and instruction set details.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-06.015.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-06.015.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NORD-10 Hardware Reference Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-06015</span>
+          </div>
+          <div class="nd-doc-card-desc">Detailed hardware specifications and reference material for the NORD-10 minicomputer system.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-11.009.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-11.009.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">HAWK Disk System</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-11009</span>
+          </div>
+          <div class="nd-doc-card-desc">Reference manual for the HAWK disk storage system used with ND computers.</div>
+        </div>
+        </div>
+      </div>
+      <div class="nd-category-section" id="cat-30">
+        <h2 class="nd-category-header">
+          Mixed
+          <span class="nd-badge">4</span>
+        </h2>
+        <div class="nd-doc-grid">
+          
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-30.003.06</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-30.003.06" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">System Supervisor Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-30003</span>
+          </div>
+          <div class="nd-doc-card-desc">Guide for system supervisors covering both hardware and software administration tasks for ND systems.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-30.031.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-30.031.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">Compact Operator Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-30031</span>
+          </div>
+          <div class="nd-doc-card-desc">Operator guide for Compact computer systems from Norsk Data.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-30.051.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-30.051.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">FTX Operating Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-30051</span>
+          </div>
+          <div class="nd-doc-card-desc">Operating guide for the FTX system, which provides fault tolerance and high availability for ND systems.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-40.004.07</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-40.004.07" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">Documentation Catalogue</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-40004</span>
+          </div>
+          <div class="nd-doc-card-desc">Comprehensive catalogue of all Norsk Data documentation available for Norsk Data computer systems.</div>
+        </div>
+        </div>
+      </div>
+      <div class="nd-category-section" id="cat-99">
+        <h2 class="nd-category-header">
+          Reference
+          <span class="nd-badge">1</span>
+        </h2>
+        <div class="nd-doc-grid">
+          
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-99.001.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-99.001.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SINTRAN III Reference Card</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-10048</span>
+          </div>
+          <div class="nd-doc-card-desc">Quick reference card for SINTRAN III commands and syntax.</div>
+        </div>
+        </div>
+      </div>
+      <div class="nd-category-section" id="cat-60">
+        <h2 class="nd-category-header">
+          Software
+          <span class="nd-badge">37</span>
+        </h2>
+        <div class="nd-doc-grid">
+          
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.072.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.072.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SINTRAN III Real Time Loader System Documentation</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60072</span>
+          </div>
+          <div class="nd-doc-card-desc">Description of the implementation of the real time loader, written for system programmers in support and development.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.075.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.075.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NORD-50 Assembler</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60075</span>
+          </div>
+          <div class="nd-doc-card-desc">Manual describing the NORD-50 assembler operating procedure, assembler directives, macro usage and external program representation.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.076.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.076.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NORD-50 Monitor User's Guide and System Documentation</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60076</span>
+          </div>
+          <div class="nd-doc-card-desc">Guide explaining how to run NORD-50 programs, available commands, file access, and monitor system architecture.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.077.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.077.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SIBINTER</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60077</span>
+          </div>
+          <div class="nd-doc-card-desc">Description of SIBINTER, the ND Interactive Information Processing and Report Generating System, for processing records interactively in the database.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.078.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.078.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">Data Base Theory and Design</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60078</span>
+          </div>
+          <div class="nd-doc-card-desc">Introduction to database concepts, record access methods, and database design, suitable for anyone setting up a database.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.079.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.079.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">MEAS II - An Analog Program System for Process Control User's Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60079</span>
+          </div>
+          <div class="nd-doc-card-desc">User manual for MEAS II, an analog program system for real time process control running under SINTRAN III.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.082.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.082.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SINTRAN III Core User's Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60082</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for the non-disk version of SINTRAN III, known as SINTRAN III/RT.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.083.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.083.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NORD-50 Loader</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60083</span>
+          </div>
+          <div class="nd-doc-card-desc">Manual describing the NORD-50 loader, which loads relocatable object files into the NORD-50 memory.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.088.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.088.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">ND Screen Handling System</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60088</span>
+          </div>
+          <div class="nd-doc-card-desc">Description of the ND Screen Handling System for creating and managing screen forms on ND systems.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.093.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.093.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NORD Process I/O</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60093</span>
+          </div>
+          <div class="nd-doc-card-desc">Documentation for the NORD Process I/O system for industrial process control applications.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.094.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.094.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NORDCOM User Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60094</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for the NORDCOM communication system for ND computers.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.096.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.096.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">MAC Assembler User's Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60096</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for the MAC Assembler used on NORD-10 and ND-100 systems.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.099.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.099.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">FLOCON User Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60099</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for FLOCON, a flow control system for process applications.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.100.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.100.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">VIP Emulator User Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60100</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for the VIP Emulator, which allows ND systems to emulate Honeywell VIP terminals.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.101.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.101.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NORD Data Entry System</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60101</span>
+          </div>
+          <div class="nd-doc-card-desc">Documentation for the NORD Data Entry System for structured data input.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.105.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.105.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">ND TPS General Description</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60105</span>
+          </div>
+          <div class="nd-doc-card-desc">General description of the ND Transaction Processing System (TPS).</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.106.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.106.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">Utilities for RPG-II</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60106</span>
+          </div>
+          <div class="nd-doc-card-desc">Documentation for utility programs supporting the RPG-II programming language on ND systems.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.107.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.107.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">DATACON User Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60107</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for DATACON, a data conversion utility for ND systems.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.108.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.108.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">ISAM User Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60108</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for the Indexed Sequential Access Method (ISAM) file system on ND computers.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.111.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.111.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">ND TPS User Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60111</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for the ND Transaction Processing System (TPS).</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.117.03</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.117.03" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">PLANC Language Reference Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            
+          </div>
+          <div class="nd-doc-card-desc">Reference manual for the PLANC programming language, including syntax, semantics, and standard libraries.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.122.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.122.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SINTRAN III File System System Documentation</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60122</span>
+          </div>
+          <div class="nd-doc-card-desc">System documentation describing the implementation of the SINTRAN III file system.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.125.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.125.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SINTRAN III Introduction</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60125</span>
+          </div>
+          <div class="nd-doc-card-desc">Introductory manual for the SINTRAN III operating system.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.126.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.126.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">MAGTAPE UTILITY User Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60126</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for magnetic tape utilities on ND computer systems.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.127.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.127.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SIBAS II User Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60127</span>
+          </div>
+          <div class="nd-doc-card-desc">User manual for SIBAS II, the database management system for ND computers.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.128.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.128.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SINTRAN III Reference Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60128</span>
+          </div>
+          <div class="nd-doc-card-desc">Comprehensive reference manual for all SINTRAN III commands and features.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.128.03</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.128.03" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SINTRAN III User's Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-10048</span>
+          </div>
+          <div class="nd-doc-card-desc">Comprehensive user manual for the SINTRAN III operating system, covering basic commands and operations.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.133.01-a</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.133.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SIBAS Database Management System</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-10008</span>
+          </div>
+          <div class="nd-doc-card-desc">Documentation for the SIBAS database management system, including installation, configuration, and usage.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-60.133.01-b</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-60.133.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">SINTRAN III Real Time Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-60133</span>
+          </div>
+          <div class="nd-doc-card-desc">Guide for real-time programming and operations under SINTRAN III.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-63.017.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-63.017.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NOTIS-DS Introduction</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-63017</span>
+          </div>
+          <div class="nd-doc-card-desc">Introduction to NOTIS-DS, the Document Storage system for ND office automation.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-63.018.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-63.018.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NOTIS-WP User Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-63018</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for NOTIS-WP, the Word Processing system for ND computers.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-63.025.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-63.025.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NOTIS-CALC User Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-63025</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for NOTIS-CALC, the spreadsheet application for ND computers.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-63.027.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-63.027.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">ND TELEX User Guide</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-63027</span>
+          </div>
+          <div class="nd-doc-card-desc">User guide for the ND TELEX system for sending and receiving TELEX messages.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-63.033.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-63.033.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">NOTIS-BG User Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-63033</span>
+          </div>
+          <div class="nd-doc-card-desc">User manual for NOTIS-BG, the Business Graphics system for ND computers.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-65.001.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-65.001.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">TECH2D Reference Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-65001</span>
+          </div>
+          <div class="nd-doc-card-desc">Reference manual for TECH2D, the 2D CAD/CAM module of TECHNOVISION.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-65.003.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-65.003.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">TECHARC User Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-65003</span>
+          </div>
+          <div class="nd-doc-card-desc">User manual for TECHARC, the Drawing Archive system of TECHNOVISION.</div>
+        </div>
+        <div class="nd-doc-card">
+          <div class="nd-doc-card-header">
+            <code class="nd-doc-id">ND-65.009.01</code>
+            <a href="https://archive.org/details/norskdata-doc-ND-65.009.01" target="_blank" rel="noopener" class="nd-badge nd-badge-info">IA</a>
+            
+          </div>
+          <div class="nd-doc-card-title">TECH3D Reference Manual</div>
+          <div class="nd-doc-card-meta">
+            <span class="nd-badge">EN</span>
+            <span class="nd-badge nd-badge-product">ND-65009</span>
+          </div>
+          <div class="nd-doc-card-desc">Reference manual for TECH3D, the 3D CAD/CAM module of TECHNOVISION.</div>
+        </div>
+        </div>
+      </div>
+  </div>
+</main>
+
+<footer class="nd-footer">
+  Norsk Data Documentation Archive &middot; 50 documents
+</footer>
+
+<script>
+(function() {
+  var html = document.documentElement;
+  var themeBtn = document.getElementById('theme-toggle');
+  var stored = localStorage.getItem('nd-docs-theme');
+  var theme = (stored === 'light' || stored === 'dark') ? stored : 'dark';
+  html.setAttribute('data-theme', theme);
+  themeBtn.textContent = theme === 'dark' ? '\u263E' : '\u2600';
+  themeBtn.addEventListener('click', function() {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', theme);
+    localStorage.setItem('nd-docs-theme', theme);
+    themeBtn.textContent = theme === 'dark' ? '\u263E' : '\u2600';
+  });
+
+  var searchInput = document.getElementById('doc-search');
+  var allCards = document.querySelectorAll('.nd-doc-card');
+  var allSections = document.querySelectorAll('.nd-category-section');
+
+  searchInput.addEventListener('input', function() {
+    var q = this.value.toLowerCase().trim();
+    if (!q) {
+      allCards.forEach(function(c) { c.classList.remove('nd-hidden'); });
+      allSections.forEach(function(s) { s.classList.remove('nd-hidden'); });
+      return;
+    }
+    allCards.forEach(function(card) {
+      var text = card.textContent.toLowerCase();
+      card.classList.toggle('nd-hidden', !text.includes(q));
+    });
+    allSections.forEach(function(section) {
+      var visible = section.querySelectorAll('.nd-doc-card:not(.nd-hidden)');
+      section.classList.toggle('nd-hidden', visible.length === 0);
+    });
+  });
+})();
+</script>
+</body>
+</html>

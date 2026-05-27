@@ -24,6 +24,7 @@ import {
   formatNdNumber,
   type Category,
 } from "./api/nd-numbering.js";
+import { buildSite } from "./api/site-builder.js";
 import { runMigration } from "./migrate.js";
 import { readFileSync, existsSync, copyFileSync } from "node:fs";
 import { basename } from "node:path";
@@ -456,6 +457,17 @@ program
     console.log(
       "To actually import, run with --execute (not yet implemented)."
     );
+  });
+
+// ---------- build-site ----------
+program
+  .command("build-site")
+  .description("Generate the static GitHub Pages site into site/")
+  .action(() => {
+    const rootDir = findRootDir();
+    console.log("Building static site...");
+    buildSite(rootDir);
+    console.log("Done. Output in site/");
   });
 
 program.parse();
