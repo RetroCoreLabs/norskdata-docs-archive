@@ -1,6 +1,6 @@
 # Norsk Data Documentation Archive
 
-[![CI](https://github.com/HackerCorpLabs/norskdata-docs-archive/actions/workflows/validate.yml/badge.svg)](https://github.com/HackerCorpLabs/norskdata-docs-archive/actions/workflows/validate.yml)
+[![CI](https://github.com/RetroCoreLabs/norskdata-docs-archive/actions/workflows/validate.yml/badge.svg)](https://github.com/RetroCoreLabs/norskdata-docs-archive/actions/workflows/validate.yml)
 
 Definitive catalog and preservation metadata for all Norsk Data documentation -- manuals, technical notes, reference cards, schematics, and program descriptions.
 
@@ -14,7 +14,7 @@ Definitive catalog and preservation metadata for all Norsk Data documentation --
 
 ```bash
 # Clone the repository
-git clone https://github.com/HackerCorpLabs/norskdata-docs-archive.git
+git clone https://github.com/RetroCoreLabs/norskdata-docs-archive.git
 cd norskdata-docs-archive
 
 # Verify prerequisites are installed
@@ -63,8 +63,8 @@ site/               GitHub Pages static site (auto-generated)
 
 ## Related Projects
 
-- [norskdata-software-archive](https://github.com/HackerCorpLabs/norskdata-software-archive) -- Software media preservation
-- [NDInsight](https://github.com/HackerCorpLabs/NDInsight) -- Curated research and knowledge layer
+- [norskdata-software-archive](https://github.com/RetroCoreLabs/norskdata-software-archive) -- Software media preservation
+- [NDInsight](https://github.com/RetroCoreLabs/NDInsight) -- Curated research and knowledge layer
 
 ## License
 
